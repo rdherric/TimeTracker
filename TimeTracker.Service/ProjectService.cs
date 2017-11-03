@@ -61,6 +61,21 @@ namespace TimeTracker.Service
             //Return the result
             return this._mapper.Map<ProjectDto>(project);
         }
+
+
+        /// <summary>
+        /// GetClientById gets only the Client from the Project
+        /// by the specified ID.
+        /// </summary>
+        /// <param name="id">The ID for which to get Client</param>
+        /// <returns>String Client if found, String.Empty otherwise</returns>
+        public string GetClientById(long id)
+        {
+            //Return the result
+            return this._context.Projects
+                .FirstOrDefault(p => p.Id == id)?
+                .Client ?? String.Empty;
+        }
         #endregion
 
 

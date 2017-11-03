@@ -16,7 +16,7 @@ namespace TimeTracker.Service.Mapping
             //Map from Task to DTO
             this.CreateMap<Task, TaskDto>()
                 .ForMember(dto => dto.EndDateTime, o => o.ResolveUsing(t => t.EndDateTime.ToJavaScriptDate()))
-                .ForMember(dto => dto.ProjectClient, o => o.ResolveUsing(t => t.Project.Client))
+                .ForMember(dto => dto.ProjectClient, o => o.ResolveUsing<TaskProjectClientResolver>())
                 .ForMember(dto => dto.StartDateTime, o => o.ResolveUsing(t => t.StartDateTime.ToJavaScriptDate()));
 
             //Map from DTO to Project
