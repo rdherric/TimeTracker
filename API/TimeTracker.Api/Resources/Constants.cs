@@ -6,6 +6,7 @@ namespace TimeTracker.Api.Resources
     public class Constants
     {
         public const string Project = "project";
+        public const string Statistics = "statistics";
         public const string Task = "task";
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.Api.Resources;
-using TimeTracker.Dto.Transfer;
+using TimeTracker.Dto;
 using TimeTracker.Service;
 
 namespace TimeTracker.Api.Controllers

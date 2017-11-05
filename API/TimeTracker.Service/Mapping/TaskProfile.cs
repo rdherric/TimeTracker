@@ -2,7 +2,7 @@
 using AutoMapper;
 using TimeTracker.Data.Entity;
 using TimeTracker.Data.Extensions;
-using TimeTracker.Dto.Transfer;
+using TimeTracker.Dto;
 
 namespace TimeTracker.Service.Mapping
 {

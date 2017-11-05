@@ -4,7 +4,7 @@ using System.Linq;
 using AutoMapper;
 using TimeTracker.Data.Context;
 using TimeTracker.Data.Entity;
-using TimeTracker.Dto.Transfer;
+using TimeTracker.Dto;
 
 namespace TimeTracker.Service
 {

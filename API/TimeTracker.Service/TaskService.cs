@@ -5,7 +5,7 @@ using AutoMapper;
 using TimeTracker.Data.Context;
 using TimeTracker.Data.Entity;
 using TimeTracker.Data.Extensions;
-using TimeTracker.Dto.Transfer;
+using TimeTracker.Dto;
 
 namespace TimeTracker.Service
 {
@@ -131,6 +131,78 @@ namespace TimeTracker.Service
 
             //Return the result
             return this._mapper.Map<TaskDto>(task);
+        }
+        #endregion
+
+
+        #region Statistics methods
+        /// <summary>
+        /// GetMinutesTodayByProjectId gets the total minutes before the specified
+        /// time for the specified date.
+        /// </summary>
+        /// <param name="projectId">The ID of the Project</param>
+        /// <param name="endDateTime">the end date time</param>
+        /// <returns>Number of minutes today</returns>
+        public int GetMinutesTodayByProjectId(long projectId, DateTime endDateTime)
+        {
+            //Return the result
+            return this.GetMinutesForProjectAndTimeSpan(projectId,
+                t => t.StartDateTime.Date == endDateTime.Date &&
+                     t.EndDateTime < endDateTime);
+        }
+
+
+        /// <summary>
+        /// GetMinutesThisWeekByProjectId gets the total minutes before the specified
+        /// time for the specified week.
+        /// </summary>
+        /// <param name="projectId">The ID of the Project</param>
+        /// <param name="endDateTime">the end date time</param>
+        /// <returns>Number of minutes this week</returns>
+        public int GetMinutesThisWeekByProjectId(long projectId, DateTime endDateTime)
+        {
+            //Calculate the days of the year for the week of the specified Date
+            DateTime lastDateTimeOfLastWeek = endDateTime.Date.AddDays((int) endDateTime.DayOfWeek * -1).AddTicks(-1);
+            DateTime firstDateTimeOfNextWeek = lastDateTimeOfLastWeek.AddDays(7).AddTicks(1);
+
+            //Return the result
+            return this.GetMinutesForProjectAndTimeSpan(projectId,
+                t => t.StartDateTime > lastDateTimeOfLastWeek &&
+                     t.StartDateTime < firstDateTimeOfNextWeek &&
+                     t.EndDateTime < endDateTime);
+        }
+
+
+        /// <summary>
+        /// GetMinutesThisMonthByProjectId gets the total minutes before the specified
+        /// time for the specified month.
+        /// </summary>
+        /// <param name="projectId">The ID of the Project</param>
+        /// <param name="endDateTime">the end date time</param>
+        /// <returns>Number of minutes this month</returns>
+        public int GetMinutesThisMonthByProjectId(long projectId, DateTime endDateTime)
+        {
+            //Return the result
+            return this.GetMinutesForProjectAndTimeSpan(projectId,
+                t => t.StartDateTime.Month == endDateTime.Month &&
+                     t.EndDateTime < endDateTime);
+        }
+
+
+        /// <summary>
+        /// GetMinutesForProjectAndTimeSpan is a helper method to get 
+        /// the total number of minutes for a Project and Time Span.
+        /// </summary>
+        /// <param name="projectId">The ID of the Project</param>
+        /// <param name="timeSpanSelector">The way to select Tasks</param>
+        /// <returns>Number of Minutes for the time span</returns>
+        private int GetMinutesForProjectAndTimeSpan(long projectId, Func<Task, bool> timeSpanSelector)
+        {
+            //Return the result with the selector specified
+            return Convert.ToInt32(this._context.Tasks
+                .Where(t => t.ProjectId == projectId && timeSpanSelector(t) == true)
+                .Select(t => t.EndDateTime - t.StartDateTime)
+                .Sum(ts => ts.TotalMinutes));
         }
         #endregion
     }

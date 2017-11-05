@@ -6,6 +6,9 @@
 *.App/assets/fonts
 *.App/build
 
+# SQLite files
+*.db
+
 # Files created during Angular build process - only commit files that aren't generated
 src/**/*.js
 src/**/*.js.map

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TimeTracker.Dto.Transfer
+namespace TimeTracker.Dto
 {
     /// <summary>
     /// ProjectDto is used to move data to and from the API.
