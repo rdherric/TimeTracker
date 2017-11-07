@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace TimeTracker.Data.Migrations
 {
-    public partial class AddProjectIsDefault : Migration
+    public partial class AddTaskIsInSystemOfRecord : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "IsDefault",
-                table: "Projects",
-                type: "INTEGER",
+                name: "IsInSystemOfRecord",
+                table: "Task",
+                type: "bit",
                 nullable: false,
                 defaultValue: false);
         }
@@ -19,8 +19,8 @@ namespace TimeTracker.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsDefault",
-                table: "Projects");
+                name: "IsInSystemOfRecord",
+                table: "Task");
         }
     }
 }

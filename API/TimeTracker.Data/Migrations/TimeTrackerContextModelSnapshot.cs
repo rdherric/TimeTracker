@@ -17,7 +17,8 @@ namespace TimeTracker.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("TimeTracker.Data.Entity.Project", b =>
                 {
@@ -35,7 +36,7 @@ namespace TimeTracker.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("TimeTracker.Data.Entity.Task", b =>
@@ -49,6 +50,8 @@ namespace TimeTracker.Data.Migrations
 
                     b.Property<DateTime>("EndDateTime");
 
+                    b.Property<bool>("IsInSystemOfRecord");
+
                     b.Property<long>("ProjectId");
 
                     b.Property<DateTime>("StartDateTime");
@@ -57,7 +60,7 @@ namespace TimeTracker.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Task");
                 });
 
             modelBuilder.Entity("TimeTracker.Data.Entity.Task", b =>

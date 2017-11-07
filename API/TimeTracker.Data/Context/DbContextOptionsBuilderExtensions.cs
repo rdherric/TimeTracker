@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -10,8 +11,8 @@ namespace TimeTracker.Data.Context
     public static class DbContextOptionsBuilderExtensions
     {
         #region Constants
-        private const string SqliteConnectionStringFmt = "Data Source={0};";
-        private const string SqliteDatabasePathKey = "SqliteDatabasePath";
+        private const string EnvironmentKey = "Environment";
+        private const string ConnectionStringKeyFmt = "TimeTracker.{0}";
         #endregion
 
 
@@ -23,14 +24,17 @@ namespace TimeTracker.Data.Context
         /// <param name="config">The IConfiguration to get config settings</param>
         public static void ConfigureForTimeTracker(this DbContextOptionsBuilder builder, IConfiguration config)
         {
-            //Create the Connection String
-            string connectionString = string.Format(
-                DbContextOptionsBuilderExtensions.SqliteConnectionStringFmt,
-                config[DbContextOptionsBuilderExtensions.SqliteDatabasePathKey]
-            );
+            //Get the Connection String name for the Environment
+            string environmentName = config[DbContextOptionsBuilderExtensions.EnvironmentKey];
+            string connectionStringKey = String.Format(
+                DbContextOptionsBuilderExtensions.ConnectionStringKeyFmt,
+                environmentName);
 
-            //Setup the SQLite database
-            builder.UseSqlite(connectionString);   
+            //Get the Connection String from config
+            string connectionString = config.GetConnectionString(connectionStringKey);
+
+            //Setup the SQL Server database
+            builder.UseSqlServer(connectionString);
         }
     }
 }

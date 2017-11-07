@@ -26,6 +26,12 @@ namespace TimeTracker.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Setup the application in IIS
+            services.Configure<IISOptions>(opt =>
+            {
+                opt.AutomaticAuthentication = true;
+            });
+
             //Add in the Database Context and services
             services.AddDbContext<TimeTrackerContext>(opt => opt.ConfigureForTimeTracker(this.Configuration));
             services.AddTransient<ProjectService>();

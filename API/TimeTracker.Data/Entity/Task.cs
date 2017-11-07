@@ -15,6 +15,7 @@ namespace TimeTracker.Data.Entity
         public string Description { get; set; }
         public DateTime StartDateTime { get; set; } = DateTime.MinValue;
         public DateTime EndDateTime { get; set; } = DateTime.MinValue;
+        public bool IsInSystemOfRecord { get; set; }
 
         //Relationships
         public long ProjectId { get; set; } = TimeTrackerContext.InvalidId;
