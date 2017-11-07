@@ -6,22 +6,6 @@
 *.App/assets/fonts
 *.App/build
 
-# SQLite files
-*.db
-
-# Files created during Angular build process - only commit files that aren't generated
-src/**/*.js
-src/**/*.js.map
-src/**/app.config.ts
-!src/app/**/cordova.js
-!src/app/**/service-worker.js
-!src/app/**/*.config.js
-src/app/**/app.config.js
-src/app/**/release.json
-
-# Files created during Config build process - only commit files that aren't generated
-src/app/doccs/index.html
-
 # Logs
 logs
 *.log
@@ -57,25 +41,15 @@ jspm_packages
 # build directories
 bin
 obj
+Publish
 
 # Visual Studio directory
 .vs
 .vscode
-
-# AppBuilder directory
-.ab
+*.csproj.user
 
 # Optional npm cache directory
 .npm
 
-# Optional REPL history
-.node_repl_history
-Debug.MPM
-Debug.App
-
 # Gulp webserver host config
 local.json
-
-# Ionic build output directory
-builds
-.sourcemaps
