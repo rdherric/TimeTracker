@@ -10,9 +10,9 @@ const loggerMiddleware = createLogger();
 
 // Combine all of the reducers
 let rootReducer = combineReducers({
-  projects: projectReducer,
-  tasks: taskReducer,
-  statistics: statisticsReducer
+    projects: projectReducer,   
+    tasks: taskReducer,
+    statistics: statisticsReducer
 });
 
 // Top-level data store for TimeTracker

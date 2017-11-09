@@ -26,8 +26,8 @@ export function updateProject(project) {
         createProjectUrl(UPDATE_PROJECT, project.id),
         project,
         () => entityOperation(UPDATE_PROJECT, project),
-        (rtn) => entityOperationSuccess(ADD_PROJECT_SUCCESS, rtn),
-        (error) => entityOperationError(ADD_PROJECT_ERROR, null, error)
+        (rtn) => entityOperationSuccess(UPDATE_PROJECT_SUCCESS, rtn),
+        (error) => entityOperationError(UPDATE_PROJECT_ERROR, null, error)
     );
 }
 

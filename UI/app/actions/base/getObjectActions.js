@@ -16,7 +16,7 @@ export function getObjectSuccess(type, rtn) {
         ui: {
             inProcess: false
         }
-    }
+    };
 }
 
 // Action to signal error on Object get
@@ -28,5 +28,5 @@ export function getObjectError(type, rtn, error) {
             inProcess: false,
             error
         }
-    }
+    };
 }

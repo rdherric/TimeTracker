@@ -13,7 +13,7 @@ export function addTask(task) {
     return httpPost(
         createTaskUrl(ADD_TASK),
         task,
-        () => entityOperation(ADD_TASK, project),
+        () => entityOperation(ADD_TASK, task),
         (rtn) => entityOperationSuccess(ADD_TASK_SUCCESS, rtn),
         (error) => entityOperationError(ADD_TASK_ERROR, null, error)
     );
@@ -26,8 +26,8 @@ export function updateTask(project) {
         createTaskUrl(UPDATE_TASK, project.id),
         project,
         () => entityOperation(UPDATE_TASK, project),
-        (rtn) => entityOperationSuccess(ADD_TASK_SUCCESS, rtn),
-        (error) => entityOperationError(ADD_TASK_ERROR, null, error)
+        (rtn) => entityOperationSuccess(UPDATE_TASK_SUCCESS, rtn),
+        (error) => entityOperationError(UPDATE_TASK_ERROR, null, error)
     );
 }
 

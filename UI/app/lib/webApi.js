@@ -11,7 +11,7 @@ export function httpGet(uri, requestAction, successAction, errorAction) {
 // POSTs to the specified URL
 export function httpPost(uri, body, requestAction, successAction, errorAction) {
     return performFetch(
-        () => fetch(uri, { method: "POST", body: JSON.stringify(body) }),
+        () => fetch(uri, { method: 'POST', body: JSON.stringify(body) }),
         requestAction,
         successAction,
         errorAction
@@ -21,7 +21,7 @@ export function httpPost(uri, body, requestAction, successAction, errorAction) {
 // PUTs to the specified URL
 export function httpPut(uri, body, requestAction, successAction, errorAction) {
     return performFetch(
-        () => fetch(uri, { method: "PUT", body: JSON.stringify(body) }),
+        () => fetch(uri, { method: 'PUT', body: JSON.stringify(body) }),
         requestAction,
         successAction,
         errorAction
@@ -31,17 +31,11 @@ export function httpPut(uri, body, requestAction, successAction, errorAction) {
 // DELETEs to the specified URL
 export function httpDelete(uri, requestAction, successAction, errorAction) {
     return performFetch(
-        () => fetch(uri, { method: "DELETE" }),
+        () => fetch(uri, { method: 'DELETE' }),
         requestAction,
         successAction,
         errorAction
     );
-}
-
-// Private method to generate the URL
-function createCompleteUri(uri) {
-    // Add the passed parameter to the base
-    return ApiUrlBase + uri;
 }
 
 // Private method to run the HTTP operations

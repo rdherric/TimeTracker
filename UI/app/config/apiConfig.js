@@ -1,15 +1,15 @@
 // Root URL of the API
-const ApiUrlBase = "http://localhost:58799";
+const ApiUrlBase = 'http://localhost:58799';
 
 // Placeholder for IDs
-const ID_PLACEHOLDER = "##ID##"
+const ID_PLACEHOLDER = '##ID##';
 
 // Project API URLs
 const projectUrls = {
-    GET_PROJECT_LIST: "/project/all",
-    ADD_PROJECT: "/project",
-    UPDATE_PROJECT: "/project/" + ID_PLACEHOLDER,
-    DELETE_PROJECT: "/project/" + ID_PLACEHOLDER
+    GET_PROJECT_LIST: '/project/all',
+    ADD_PROJECT: '/project',
+    UPDATE_PROJECT: '/project/' + ID_PLACEHOLDER,
+    DELETE_PROJECT: '/project/' + ID_PLACEHOLDER
 };
 
 // Project API parser
@@ -20,10 +20,10 @@ export function createProjectUrl(type, id) {
 
 // Task API URLs
 const taskUrls = {
-    GET_TASK_LIST: "/task/all",
-    ADD_TASK: "/task",
-    UPDATE_TASK: "/task/" + ID_PLACEHOLDER,
-    DELETE_TASK: "/task/" + ID_PLACEHOLDER
+    GET_TASK_LIST: '/task/all',
+    ADD_TASK: '/task',
+    UPDATE_TASK: '/task/' + ID_PLACEHOLDER,
+    DELETE_TASK: '/task/' + ID_PLACEHOLDER
 };
 
 // Task API parser
@@ -34,9 +34,9 @@ export function createTaskUrl(type, id) {
 
 // Statistics API URLs
 const statisticsUrls = {
-    GET_STATISTICS: "/statistics",
-    START_DATE_QUERY = "startDate=",
-    END_DATE_QUERY = "endDate=",
+    GET_STATISTICS: '/statistics',
+    START_DATE_QUERY: 'startDate=',
+    END_DATE_QUERY: 'endDate=',
 };
 
 // Statistics API parser
@@ -49,7 +49,7 @@ export function createStatisticsUrl(type, startDate, endDate) {
     if (startDate > 0 || endDate > 0) {
 
         // Add the Query marker
-        rtn = rtn + "?";
+        rtn = rtn + '?';
 
         // Add the startDate if necessary
         if (startDate > 0) {
@@ -58,7 +58,7 @@ export function createStatisticsUrl(type, startDate, endDate) {
 
         // Add an Ampersand if necessary
         if (startDate > 0 && endDate > 0) {
-            rtn = rtn + "&";
+            rtn = rtn + '&';
         }
 
         // Add the endDate if necessary
