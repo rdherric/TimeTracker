@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import TaskList from '../presentation/TaskList';
+import { TaskList } from '../presentation/TaskList';
 
 // Mapping for properties
 const mapStateToProps = state => {
@@ -11,15 +11,13 @@ const mapStateToProps = state => {
 // Mapping for dispatches
 const mapDispatchToProps = dispatch => {
     return { 
+        dispatch,
         onTaskDoubleClick: () => { return; }
     };
 };
 
 // Connect to Redux
-const ManageTasks = connect(
+export const ManageTasks = connect(
     mapStateToProps,
     mapDispatchToProps
 )(TaskList);
-
-// Export the default
-export default ManageTasks;

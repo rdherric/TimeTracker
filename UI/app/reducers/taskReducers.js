@@ -5,8 +5,14 @@ import {
     DELETE_TASK, DELETE_TASK_SUCCESS, DELETE_TASK_ERROR
 } from '../actions/task/taskActionConstants';
 
+// Initial state for the Reducers
+const initialState = {
+    taskList: [],
+    taskUi: {}
+};
+
 // Reducer for Task data
-export function taskReducer(state = {}, action) {
+export function taskReducer(state = initialState, action) {
     return {
         taskList: updateTaskList(state.taskList, action),
         taskUi: updateTaskUi(state.taskUi, action)

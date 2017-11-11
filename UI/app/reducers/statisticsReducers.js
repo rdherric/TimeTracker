@@ -2,6 +2,12 @@ import {
     GET_STATISTICS, GET_STATISTICS_SUCCESS, GET_STATISTICS_ERROR
 } from '../actions/statistics/statisticsActionConstants';
 
+// Initial state for the Reducers
+const initialState = {
+    statistics: [],
+    statisticsUi: {}
+};
+
 // Reducer for Statistics data
 export function statisticsReducer(state = {}, action) {
     return {

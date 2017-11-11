@@ -74,5 +74,5 @@ function performFetch(fetchOperation, requestAction, successAction, errorAction)
                 // and if the action is defined
                 json => { if (errorOccurred === false && successAction) dispatch(successAction(json)); }
             );
-    }
+    };
 }

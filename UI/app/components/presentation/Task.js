@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Moment from 'react-moment';
  
 // Function to create the Task row
-const Task = ({ task, onDoubleClick }) => (
+export const Task = ({ task, onDoubleClick }) => (
     <View style={{ flexDirection: 1}}>
         <Text style={{ flex: 1 }}>{task.id}</Text>
         <Text style={{ flex: 1 }}>{task.projectClient}</Text>
@@ -19,6 +19,3 @@ Task.propTypes = {
     task: PropTypes.object.isRequired,
     onDoubleClick: PropTypes.func
 };
-
-// Export the function
-export default Task;

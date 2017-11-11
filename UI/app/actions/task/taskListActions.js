@@ -1,6 +1,6 @@
 import { httpGet } from '../../lib/webApi';
 import { getObject, getObjectSuccess, getObjectError } from '../base/getObjectActions';
-import { GET_TASK_LIST, GET_TASK_LIST_SUCCESS, GET_TASK_LIST_ERROR } from './projectActionConstants';
+import { GET_TASK_LIST, GET_TASK_LIST_SUCCESS, GET_TASK_LIST_ERROR } from './taskActionConstants';
 import { createTaskUrl } from '../../config/apiConfig';
 
 // Get Task List with Thunk

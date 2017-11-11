@@ -5,8 +5,14 @@ import {
     DELETE_PROJECT, DELETE_PROJECT_SUCCESS, DELETE_PROJECT_ERROR
 } from '../actions/project/projectActionConstants';
 
+// Initial state for the Reducers
+const initialState = {
+    projectList: [],
+    projectUi: {}
+};
+
 // Reducer for Project data
-export function projectReducer(state = {}, action) {
+export function projectReducer(state = initialState, action) {
     return {
         projectList: updateProjectList(state.projectList, action),
         projectUi: updateProjectUi(state.projectUi, action)

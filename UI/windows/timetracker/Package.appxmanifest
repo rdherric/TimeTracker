@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="ce98b6a6-08fd-4c92-a96e-191c618491cd"
+    Name="f05209ab-c97a-460b-b2a6-82c8dbc1c299"
     Publisher="CN=rober"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="ce98b6a6-08fd-4c92-a96e-191c618491cd" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="f05209ab-c97a-460b-b2a6-82c8dbc1c299" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>timetracker</DisplayName>

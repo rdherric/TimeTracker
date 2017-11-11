@@ -4,6 +4,7 @@ import { createLogger } from 'redux-logger';
 import { projectReducer } from '../reducers/projectReducers';
 import { taskReducer } from '../reducers/taskReducers';
 import { statisticsReducer } from '../reducers/statisticsReducers';
+import { getTaskList } from '../actions/task/taskListActions';
 
 // Logger middleware
 const loggerMiddleware = createLogger();
@@ -23,3 +24,6 @@ export const store = createStore(
         loggerMiddleware
     )
 );
+
+// Method to get the Tasks from the API
+store.dispatch(getTaskList());

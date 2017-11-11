@@ -1,15 +1,35 @@
-import React, { View } from 'react';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import Task from './Task';
+import { Task } from './Task';
 
-// Function to create the TaskList
-const TaskList = ({ taskList, onTaskDoubleClick }) => (
-    <View>
-        {taskList.map((t, index) => (
-            <Task key={index} task={t} onDoubleClick={() => onTaskDoubleClick(t)} />
-        ))}
-    </View>
-);
+// TaskList Component
+export class TaskList extends Component {
+
+    // Constructor
+    constructor(props) {
+
+        // Call the base class
+        super(props);
+
+        // Save the state
+        this.state = {
+            taskList: props.taskList,
+            onTaskDoubleClick: () => {}
+        };
+    }
+
+    // Render method
+    render() {
+        return (
+            <View>
+                {this.state.taskList.map((t, index) => (
+                    <Task key={index} task={t} onDoubleClick={() => this.state.onTaskDoubleClick(t)} />
+                ))}
+            </View>
+        );        
+    }
+}
 
 // Setup PropTypes
 TaskList.propTypes = {
@@ -24,6 +44,3 @@ TaskList.propTypes = {
     ).isRequired,
     onTaskDoubleClick: PropTypes.func
 };
-
-// Export the TaskList function
-export default TaskList;

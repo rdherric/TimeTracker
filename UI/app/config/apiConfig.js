@@ -1,5 +1,5 @@
 // Root URL of the API
-const ApiUrlBase = 'http://localhost:58799';
+const ApiUrlBase = 'http://localhost/timetracker';
 
 // Placeholder for IDs
 const ID_PLACEHOLDER = '##ID##';
