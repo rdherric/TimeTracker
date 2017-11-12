@@ -12,19 +12,21 @@ export class TaskList extends Component {
         // Call the base class
         super(props);
 
-        // Save the state
-        this.state = {
-            taskList: props.taskList,
-            onTaskDoubleClick: () => {}
-        };
+        // Now dispatch a call to the API for the Task list via the passed method
+        // on Props
+        props.dispatchGetTaskList();
     }
 
     // Render method
     render() {
+
+        // Temp storage for the Task List
+        let localTaskList = this.props.taskList;
+
         return (
             <View>
-                {this.state.taskList.map((t, index) => (
-                    <Task key={index} task={t} onDoubleClick={() => this.state.onTaskDoubleClick(t)} />
+                {localTaskList.map((t, index) => (
+                    <Task key={index} task={t} onDoubleClick={() => this.props.onTaskDoubleClick(t)} />
                 ))}
             </View>
         );        
@@ -42,5 +44,6 @@ TaskList.propTypes = {
             endDateTime: PropTypes.number.isRequired
         }).isRequired
     ).isRequired,
-    onTaskDoubleClick: PropTypes.func
+    onTaskDoubleClick: PropTypes.func,
+    dispatchGetTaskList: PropTypes.func.isRequired
 };

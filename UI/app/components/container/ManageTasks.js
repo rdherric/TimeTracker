@@ -1,5 +1,7 @@
+import { Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { TaskList } from '../presentation/TaskList';
+import { getTaskList } from '../../actions/task/taskListActions';
 
 // Mapping for properties
 const mapStateToProps = state => {
@@ -11,8 +13,8 @@ const mapStateToProps = state => {
 // Mapping for dispatches
 const mapDispatchToProps = dispatch => {
     return { 
-        dispatch,
-        onTaskDoubleClick: () => { return; }
+        onTaskDoubleClick: () => Alert.alert('Double-click!'),
+        dispatchGetTaskList: () => dispatch(getTaskList())
     };
 };
 

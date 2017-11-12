@@ -1,18 +1,35 @@
-import React, { View, Text } from 'react';
+import React, { Component } from 'react';
+import { View, Text, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
-import Moment from 'react-moment';
+import Moment from 'moment';
+import { DATE_FORMAT } from '../../lib/dateFormat';
  
-// Function to create the Task row
-export const Task = ({ task, onDoubleClick }) => (
-    <View style={{ flexDirection: 1}}>
-        <Text style={{ flex: 1 }}>{task.id}</Text>
-        <Text style={{ flex: 1 }}>{task.projectClient}</Text>
-        <Text style={{ flex: 1 }}>{task.description}</Text>
-        <Text style={{ flex: 1 }}><Moment unix>{task.startDateTime}</Moment></Text>
-        <Text style={{ flex: 1 }}><Moment unix>{task.endDateTime}</Moment></Text>
-        <Text style={{ flex: 1 }}><Moment unix format='hh:mm'>{task.endDateTime - task.startDateTime}</Moment></Text>
-    </View>
-);
+// Task class
+export class Task extends Component {
+
+    // Render method
+    render() {
+
+        // Local storage for the Task
+        let localTask = this.props.task;
+
+        // Setup Moment
+        Moment().locale('en');
+
+        return (
+            <TouchableHighlight onPress={this.props.onDoubleClick}>
+                <View style={{ flexDirection: 'row'}}>
+                    <Text style={{ flex: 1 }}>{localTask.id}</Text>
+                    <Text style={{ flex: 1 }}>{localTask.projectClient}</Text>
+                    <Text style={{ flex: 1 }}>{localTask.description}</Text>
+                    <Text style={{ flex: 1 }}>{Moment(localTask.startDateTime).format(DATE_FORMAT)}</Text>
+                    <Text style={{ flex: 1 }}>{Moment(localTask.endDateTime).format(DATE_FORMAT)}</Text>
+                    <Text style={{ flex: 1 }}>{Moment(localTask.endDateTime - localTask.startDateTime).format('hh:mm')}</Text>
+                </View>
+            </TouchableHighlight>
+        );        
+    }
+}
 
 // Setup the PropTypes
 Task.propTypes = {
