@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import PropTypes from 'prop-types';
-import Moment from 'moment';
+import moment from 'moment';
 import { DATE_FORMAT } from '../../lib/dateFormat';
  
 // Task class
@@ -11,22 +11,21 @@ export class Task extends Component {
     render() {
 
         // Local storage for the Task
-        let localTask = this.props.task;
+        let localTask = this.props.task.item;
 
-        // Setup Moment
-        Moment().locale('en');
+        // Setup moment
+        moment.locale('en');
 
         return (
-            <TouchableHighlight onPress={this.props.onDoubleClick}>
-                <View style={{ flexDirection: 'row'}}>
-                    <Text style={{ flex: 1 }}>{localTask.id}</Text>
-                    <Text style={{ flex: 1 }}>{localTask.projectClient}</Text>
-                    <Text style={{ flex: 1 }}>{localTask.description}</Text>
-                    <Text style={{ flex: 1 }}>{Moment(localTask.startDateTime).format(DATE_FORMAT)}</Text>
-                    <Text style={{ flex: 1 }}>{Moment(localTask.endDateTime).format(DATE_FORMAT)}</Text>
-                    <Text style={{ flex: 1 }}>{Moment(localTask.endDateTime - localTask.startDateTime).format('hh:mm')}</Text>
-                </View>
-            </TouchableHighlight>
+            <View style={{ flexDirection: 'row'}}>
+                <Text style={{ flex: 1 }}>{localTask.id}</Text>
+                <Text style={{ flex: 1 }}>{localTask.projectClient}</Text>
+                <Text style={{ flex: 1 }}>{localTask.description}</Text>
+                <Text style={{ flex: 1 }}>{moment(localTask.startDateTime).format(DATE_FORMAT)}</Text>
+                <Text style={{ flex: 1 }}>{moment(localTask.endDateTime).format(DATE_FORMAT)}</Text>
+                <Text style={{ flex: 1 }}>{moment.utc(localTask.endDateTime - localTask.startDateTime).format('H:mm')}</Text>
+                <Button style={{ flex: 1 }} onPress={() => this.props.onEditClick(localTask)} title='EDIT' />
+            </View>
         );        
     }
 }
@@ -34,5 +33,5 @@ export class Task extends Component {
 // Setup the PropTypes
 Task.propTypes = {
     task: PropTypes.object.isRequired,
-    onDoubleClick: PropTypes.func
+    onEditClick: PropTypes.func
 };

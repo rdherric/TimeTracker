@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 // Mapping for dispatches
 const mapDispatchToProps = dispatch => {
     return { 
-        onTaskDoubleClick: () => Alert.alert('Double-click!'),
+        onTaskEditClick: (task) => Alert.alert('Editing Task #' + task.id + '!'),
         dispatchGetTaskList: () => dispatch(getTaskList())
     };
 };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { FlatList, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { Task } from './Task';
 
@@ -19,17 +19,23 @@ export class TaskList extends Component {
 
     // Render method
     render() {
-
-        // Temp storage for the Task List
-        let localTaskList = this.props.taskList;
-
         return (
-            <View>
-                {localTaskList.map((t, index) => (
-                    <Task key={index} task={t} onDoubleClick={() => this.props.onTaskDoubleClick(t)} />
-                ))}
-            </View>
-        );        
+            <FlatList
+                data={this.props.taskList}
+                keyExtractor={this._extractKey}
+                renderItem={this._renderTask}
+            />
+        );
+    }
+
+    // Method to extract the Key for an Item
+    _extractKey = (task, index) => task.id;
+
+    // Method to render a Task
+    _renderTask = (task) => {
+        return (
+            <Task task={task} onEditClick={this.props.onTaskEditClick} />
+        );
     }
 }
 
@@ -44,6 +50,6 @@ TaskList.propTypes = {
             endDateTime: PropTypes.number.isRequired
         }).isRequired
     ).isRequired,
-    onTaskDoubleClick: PropTypes.func,
+    onTaskEditClick: PropTypes.func.isRequired,
     dispatchGetTaskList: PropTypes.func.isRequired
 };
