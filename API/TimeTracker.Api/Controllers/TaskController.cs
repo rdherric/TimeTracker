@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.Api.Resources;
+using TimeTracker.Data.Extensions;
 using TimeTracker.Dto;
 using TimeTracker.Service;
 
@@ -33,15 +34,27 @@ namespace TimeTracker.Api.Controllers
 
 
         /// <summary>
-        /// Get gets the complete set of Tasks from the database
+        /// Get gets the complete set of DailyTaskDtos from the database
         /// based on the date parameters.
         /// </summary>
         /// <returns>ICollection of TaskDto objects</returns>
         [HttpGet("all")]
-        public ICollection<TaskDto> Get([FromQuery] long startDate = 0, [FromQuery] long endDate = 0)
+        public IEnumerable<DailyTaskDto> Get([FromQuery] long startDateTime = 0, [FromQuery] long endDateTime = 0)
         {
-            //Return all Projects
-            return this._service.GetAll(startDate, endDate);
+            //Setup startDateTime if it has not been passed in
+            DateTime sdt =
+            (startDateTime > 0
+                ? startDateTime.FromJavaScriptDate()
+                : DateTime.MinValue);
+
+            //Setup endDateTime if it has not been passed in
+            DateTime edt =
+            (endDateTime > 0
+                ? endDateTime.FromJavaScriptDate()
+                : DateTime.UtcNow);
+
+            //Return all Tasks
+            return this._service.GetAllDailyTasks(sdt, edt);
         }
 
 

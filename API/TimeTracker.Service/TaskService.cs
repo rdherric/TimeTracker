@@ -137,72 +137,92 @@ namespace TimeTracker.Service
 
         #region Statistics methods
         /// <summary>
-        /// GetMinutesTodayByProjectId gets the total minutes before the specified
+        /// GetAllDailyTasks gets the whole set of Tasks with Statistics
+        /// for a date range.
+        /// </summary>
+        /// <param name="startDateTime">The Start DateTime</param>
+        /// <param name="endDateTime">The End DateTime</param>
+        /// <returns>List of Tasks with Statistics</returns>
+        public IEnumerable<DailyTaskDto> GetAllDailyTasks(DateTime startDateTime, DateTime endDateTime)
+        {
+            //Return the result - get the list of Dates, then 
+            //Select into a DailyTaskDto
+            return this._context.Tasks
+                .Where(t => t.StartDateTime > startDateTime && t.EndDateTime < endDateTime)
+                .GroupBy(t => t.StartDateTime.Date)
+                .AsEnumerable()
+                .Select(g => new DailyTaskDto
+                {
+                    Date = g.Key.ToJavaScriptDate(),
+                    Tasks = this._mapper.Map<IEnumerable<TaskDto>>(g.ToArray()),
+                    MillisecondsToday = this.GetMillisecondsToday(g.Key),
+                    MillisecondsWeekToDate = this.GetMillisecondsWeekToDate(g.Key),
+                    MillisecondsMonthToDate = this.GetMillisecondsMonthToDate(g.Key)
+                });
+        }
+
+        
+        /// <summary>
+        /// GetMillisecondsToday gets the total ms before the specified
         /// time for the specified date.
         /// </summary>
-        /// <param name="projectId">The ID of the Project</param>
         /// <param name="endDateTime">the end date time</param>
         /// <returns>Number of minutes today</returns>
-        public int GetMinutesTodayByProjectId(long projectId, DateTime endDateTime)
+        public int GetMillisecondsToday(DateTime endDateTime)
         {
             //Return the result
-            return this.GetMinutesForProjectAndTimeSpan(projectId,
+            return this.GetMillisecondsForTimeSpan(
                 t => t.StartDateTime.Date == endDateTime.Date &&
-                     t.EndDateTime < endDateTime);
+                     t.EndDateTime < endDateTime.AddDays(1));
         }
 
 
         /// <summary>
-        /// GetMinutesThisWeekByProjectId gets the total minutes before the specified
+        /// GetMillisecondsWeekToDate gets the total ms before the specified
         /// time for the specified week.
         /// </summary>
-        /// <param name="projectId">The ID of the Project</param>
         /// <param name="endDateTime">the end date time</param>
         /// <returns>Number of minutes this week</returns>
-        public int GetMinutesThisWeekByProjectId(long projectId, DateTime endDateTime)
+        public int GetMillisecondsWeekToDate(DateTime endDateTime)
         {
-            //Calculate the days of the year for the week of the specified Date
-            DateTime lastDateTimeOfLastWeek = endDateTime.Date.AddDays((int) endDateTime.DayOfWeek * -1).AddTicks(-1);
-            DateTime firstDateTimeOfNextWeek = lastDateTimeOfLastWeek.AddDays(7).AddTicks(1);
+            //Calculate the first day of the week with this date
+            DateTime lastDateTimeOfLastWeek = endDateTime.Date.AddDays((int) endDateTime.DayOfWeek * -1);
 
             //Return the result
-            return this.GetMinutesForProjectAndTimeSpan(projectId,
+            return this.GetMillisecondsForTimeSpan(
                 t => t.StartDateTime > lastDateTimeOfLastWeek &&
-                     t.StartDateTime < firstDateTimeOfNextWeek &&
-                     t.EndDateTime < endDateTime);
+                     t.EndDateTime < endDateTime.AddDays(1));
         }
 
 
         /// <summary>
-        /// GetMinutesThisMonthByProjectId gets the total minutes before the specified
+        /// GetMillisecondsMonthToDate gets the total ms before the specified
         /// time for the specified month.
         /// </summary>
-        /// <param name="projectId">The ID of the Project</param>
         /// <param name="endDateTime">the end date time</param>
         /// <returns>Number of minutes this month</returns>
-        public int GetMinutesThisMonthByProjectId(long projectId, DateTime endDateTime)
+        public int GetMillisecondsMonthToDate(DateTime endDateTime)
         {
             //Return the result
-            return this.GetMinutesForProjectAndTimeSpan(projectId,
+            return this.GetMillisecondsForTimeSpan(
                 t => t.StartDateTime.Month == endDateTime.Month &&
-                     t.EndDateTime < endDateTime);
+                     t.EndDateTime < endDateTime.AddDays(1));
         }
 
 
         /// <summary>
-        /// GetMinutesForProjectAndTimeSpan is a helper method to get 
-        /// the total number of minutes for a Project and Time Span.
+        /// GetMillisecondsForTimeSpan is a helper method to get 
+        /// the total number of ms for a Time Span.
         /// </summary>
-        /// <param name="projectId">The ID of the Project</param>
         /// <param name="timeSpanSelector">The way to select Tasks</param>
         /// <returns>Number of Minutes for the time span</returns>
-        private int GetMinutesForProjectAndTimeSpan(long projectId, Func<Task, bool> timeSpanSelector)
+        private int GetMillisecondsForTimeSpan(Func<Task, bool> timeSpanSelector)
         {
             //Return the result with the selector specified
             return Convert.ToInt32(this._context.Tasks
-                .Where(t => t.ProjectId == projectId && timeSpanSelector(t) == true)
+                .Where(t => timeSpanSelector(t) == true)
                 .Select(t => t.EndDateTime - t.StartDateTime)
-                .Sum(ts => ts.TotalMinutes));
+                .Sum(ts => ts.TotalMilliseconds));
         }
         #endregion
     }
