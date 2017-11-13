@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Button } from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { DATE_FORMAT } from '../../lib/dateFormat';
+import { DATE_FORMAT, DURATION_FORMAT } from '../../lib/dateFormat';
  
 // Task class
 export class Task extends Component {
@@ -23,7 +23,7 @@ export class Task extends Component {
                 <Text style={{ flex: 1 }}>{localTask.description}</Text>
                 <Text style={{ flex: 1 }}>{moment(localTask.startDateTime).format(DATE_FORMAT)}</Text>
                 <Text style={{ flex: 1 }}>{moment(localTask.endDateTime).format(DATE_FORMAT)}</Text>
-                <Text style={{ flex: 1 }}>{moment.utc(localTask.endDateTime - localTask.startDateTime).format('H:mm')}</Text>
+                <Text style={{ flex: 1 }}>{moment.utc(localTask.endDateTime - localTask.startDateTime).format(DURATION_FORMAT)}</Text>
                 <Button style={{ flex: 1 }} onPress={() => this.props.onEditClick(localTask)} title='EDIT' />
             </View>
         );        

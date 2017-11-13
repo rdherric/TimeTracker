@@ -1,5 +1,5 @@
 // Root URL of the API
-const ApiUrlBase = 'http://localhost/timetracker';
+const ApiUrlBase = 'http://localhost:58799';
 
 // Placeholder for IDs
 const ID_PLACEHOLDER = '##ID##';
@@ -32,41 +32,34 @@ export function createTaskUrl(type, id) {
 }
 
 
-// Statistics API URLs
-const statisticsUrls = {
-    GET_STATISTICS: '/statistics',
-    START_DATE_QUERY: 'startDate=',
-    END_DATE_QUERY: 'endDate=',
-};
+// Tasks API parser
+// export function createTasksUrl(type, startDate, endDate) {
 
-// Statistics API parser
-export function createStatisticsUrl(type, startDate, endDate) {
+//     // Create the base URL
+//     let rtn = ApiUrlBase + statisticsUrls[type];
 
-    // Create the base URL
-    let rtn = ApiUrlBase + statisticsUrls[type];
+//     // Add QueryStrings for start or end
+//     if (startDate > 0 || endDate > 0) {
 
-    // Add QueryStrings for start or end
-    if (startDate > 0 || endDate > 0) {
+//         // Add the Query marker
+//         rtn = rtn + '?';
 
-        // Add the Query marker
-        rtn = rtn + '?';
+//         // Add the startDate if necessary
+//         if (startDate > 0) {
+//             rtn = rtn + statisticsUrls.START_DATE_QUERY + startDate;
+//         }
 
-        // Add the startDate if necessary
-        if (startDate > 0) {
-            rtn = rtn + statisticsUrls.START_DATE_QUERY + startDate;
-        }
+//         // Add an Ampersand if necessary
+//         if (startDate > 0 && endDate > 0) {
+//             rtn = rtn + '&';
+//         }
 
-        // Add an Ampersand if necessary
-        if (startDate > 0 && endDate > 0) {
-            rtn = rtn + '&';
-        }
+//         // Add the endDate if necessary
+//         if (endDate > 0) {
+//             rtn = rtn + statisticsUrls.END_DATE_QUERY + endDate;
+//         }
+//     }
 
-        // Add the endDate if necessary
-        if (endDate > 0) {
-            rtn = rtn + statisticsUrls.END_DATE_QUERY + endDate;
-        }
-    }
-
-    // Return the result
-    return rtn;
-}
+//     // Return the result
+//     return rtn;
+// }
