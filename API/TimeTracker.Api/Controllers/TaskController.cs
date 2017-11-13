@@ -37,15 +37,18 @@ namespace TimeTracker.Api.Controllers
         /// Get gets the complete set of DailyTaskDtos from the database
         /// based on the date parameters.
         /// </summary>
+        /// <param name="startDateTime">The JavaScript representation of the start date / time</param>
+        /// <param name="endDateTime">The JavaScript representation of the end date / time</param>
+        /// <param name="timeZoneOffset">The offset in minutes from GMT</param>
         /// <returns>ICollection of TaskDto objects</returns>
         [HttpGet("all")]
-        public IEnumerable<DailyTaskDto> Get([FromQuery] long startDateTime = 0, [FromQuery] long endDateTime = 0)
+        public IEnumerable<DailyTaskDto> Get([FromQuery] long startDateTime = 0, [FromQuery] long endDateTime = 0, [FromQuery] int timeZoneOffset = 0)
         {
             //Setup startDateTime if it has not been passed in
             DateTime sdt =
             (startDateTime > 0
                 ? startDateTime.FromJavaScriptDate()
-                : DateTime.MinValue);
+                : DateTimeExtensions.UnixEpoch);
 
             //Setup endDateTime if it has not been passed in
             DateTime edt =
@@ -54,7 +57,7 @@ namespace TimeTracker.Api.Controllers
                 : DateTime.UtcNow);
 
             //Return all Tasks
-            return this._service.GetAllDailyTasks(sdt, edt);
+            return this._service.GetAllDailyTasks(sdt, edt, timeZoneOffset);
         }
 
 

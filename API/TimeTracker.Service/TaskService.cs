@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using AutoMapper;
 using TimeTracker.Data.Context;
 using TimeTracker.Data.Entity;
@@ -142,8 +143,9 @@ namespace TimeTracker.Service
         /// </summary>
         /// <param name="startDateTime">The Start DateTime</param>
         /// <param name="endDateTime">The End DateTime</param>
+        /// <param name="timeZoneOffset">The offset in minutes of the DateTimes from GMT</param>
         /// <returns>List of Tasks with Statistics</returns>
-        public IEnumerable<DailyTaskDto> GetAllDailyTasks(DateTime startDateTime, DateTime endDateTime)
+        public IEnumerable<DailyTaskDto> GetAllDailyTasks(DateTime startDateTime, DateTime endDateTime, int timeZoneOffset)
         {
             //Return the result - get the list of Dates, then 
             //Select into a DailyTaskDto
@@ -151,78 +153,89 @@ namespace TimeTracker.Service
                 .Where(t => t.StartDateTime > startDateTime && t.EndDateTime < endDateTime)
                 .GroupBy(t => t.StartDateTime.Date)
                 .AsEnumerable()
-                .Select(g => new DailyTaskDto
+                .Select(g =>
                 {
-                    Date = g.Key.ToJavaScriptDate(),
-                    Tasks = this._mapper.Map<IEnumerable<TaskDto>>(g.ToArray()),
-                    MillisecondsToday = this.GetMillisecondsToday(g.Key),
-                    MillisecondsWeekToDate = this.GetMillisecondsWeekToDate(g.Key),
-                    MillisecondsMonthToDate = this.GetMillisecondsMonthToDate(g.Key)
+                    //Calculate the end time as UTC - that's the current 
+                    //Date plus the time zone offset, plus a day
+                    DateTime offsetEndDateTime = g.Key.AddMinutes(timeZoneOffset * -1).AddDays(1);
+
+                    //Return a DailyTaskDto
+                    return new DailyTaskDto
+                    {
+                        Date = g.Key.AddMinutes(timeZoneOffset * -1).ToJavaScriptDate(),
+                        Tasks = this._mapper.Map<IEnumerable<TaskDto>>(g.ToArray()),
+                        MinutesToday = this.GetMinutesToday(g.Key, offsetEndDateTime),
+                        MinutesWeekToDate = this.GetMinutesWeekToDate(g.Key, offsetEndDateTime),
+                        MinutesMonthToDate = this.GetMinutesMonthToDate(g.Key, offsetEndDateTime)
+                    };
                 });
         }
 
-        
+
         /// <summary>
-        /// GetMillisecondsToday gets the total ms before the specified
+        /// GetMinutesToday gets the total minutes before the specified
         /// time for the specified date.
         /// </summary>
-        /// <param name="endDateTime">the end date time</param>
+        /// <param name="startDateTime">the Start date time of the Tasks</param>
+        /// <param name="endDateTime">the End date time of the Tasks</param>
         /// <returns>Number of minutes today</returns>
-        public int GetMillisecondsToday(DateTime endDateTime)
+        public int GetMinutesToday(DateTime startDateTime, DateTime endDateTime)
         {
             //Return the result
-            return this.GetMillisecondsForTimeSpan(
-                t => t.StartDateTime.Date == endDateTime.Date &&
-                     t.EndDateTime < endDateTime.AddDays(1));
+            return this.GetMinutesForTimeSpan(
+                t => t.StartDateTime.Date == startDateTime.Date &&
+                     t.EndDateTime < endDateTime);
         }
 
 
         /// <summary>
-        /// GetMillisecondsWeekToDate gets the total ms before the specified
+        /// GetMinutesWeekToDate gets the total minutes before the specified
         /// time for the specified week.
         /// </summary>
-        /// <param name="endDateTime">the end date time</param>
+        /// <param name="startDateTime">the Start date time of the Tasks</param>
+        /// <param name="endDateTime">the End date time of the Tasks</param>
         /// <returns>Number of minutes this week</returns>
-        public int GetMillisecondsWeekToDate(DateTime endDateTime)
+        public int GetMinutesWeekToDate(DateTime startDateTime, DateTime endDateTime)
         {
             //Calculate the first day of the week with this date
-            DateTime lastDateTimeOfLastWeek = endDateTime.Date.AddDays((int) endDateTime.DayOfWeek * -1);
+            DateTime lastDateTimeOfLastWeek = startDateTime.Date.AddDays((int) startDateTime.DayOfWeek * -1);
 
             //Return the result
-            return this.GetMillisecondsForTimeSpan(
+            return this.GetMinutesForTimeSpan(
                 t => t.StartDateTime > lastDateTimeOfLastWeek &&
-                     t.EndDateTime < endDateTime.AddDays(1));
+                     t.EndDateTime < endDateTime);
         }
 
 
         /// <summary>
-        /// GetMillisecondsMonthToDate gets the total ms before the specified
+        /// GetMinutesMonthToDate gets the total minutes before the specified
         /// time for the specified month.
         /// </summary>
-        /// <param name="endDateTime">the end date time</param>
+        /// <param name="startDateTime">the Start date time of the Tasks</param>
+        /// <param name="endDateTime">the End date time of the Tasks</param>
         /// <returns>Number of minutes this month</returns>
-        public int GetMillisecondsMonthToDate(DateTime endDateTime)
+        public int GetMinutesMonthToDate(DateTime startDateTime, DateTime endDateTime)
         {
             //Return the result
-            return this.GetMillisecondsForTimeSpan(
-                t => t.StartDateTime.Month == endDateTime.Month &&
-                     t.EndDateTime < endDateTime.AddDays(1));
+            return this.GetMinutesForTimeSpan(
+                t => t.StartDateTime.Month == startDateTime.Month &&
+                     t.EndDateTime < endDateTime);
         }
 
 
         /// <summary>
-        /// GetMillisecondsForTimeSpan is a helper method to get 
-        /// the total number of ms for a Time Span.
+        /// GetMinutesForTimeSpan is a helper method to get 
+        /// the total number of minutes for a Time Span.
         /// </summary>
         /// <param name="timeSpanSelector">The way to select Tasks</param>
         /// <returns>Number of Minutes for the time span</returns>
-        private int GetMillisecondsForTimeSpan(Func<Task, bool> timeSpanSelector)
+        private int GetMinutesForTimeSpan(Func<Task, bool> timeSpanSelector)
         {
             //Return the result with the selector specified
             return Convert.ToInt32(this._context.Tasks
                 .Where(t => timeSpanSelector(t) == true)
                 .Select(t => t.EndDateTime - t.StartDateTime)
-                .Sum(ts => ts.TotalMilliseconds));
+                .Sum(ts => ts.TotalMinutes));
         }
         #endregion
     }

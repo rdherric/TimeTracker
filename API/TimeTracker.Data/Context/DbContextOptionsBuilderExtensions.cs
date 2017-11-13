@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 
 namespace TimeTracker.Data.Context
@@ -35,6 +36,9 @@ namespace TimeTracker.Data.Context
 
             //Setup the SQL Server database
             builder.UseSqlServer(connectionString);
+
+            //Setup all DateTimes as UTC
+            builder.ReplaceService<IEntityMaterializerSource, TimeTrackerMaterializerSource>();
         }
     }
 }

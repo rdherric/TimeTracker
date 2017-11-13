@@ -10,8 +10,8 @@ namespace TimeTracker.Dto
     {
         public long Date { get; set; }
         public IEnumerable<TaskDto> Tasks { get; set; }
-        public int MillisecondsToday { get; set; }
-        public int MillisecondsWeekToDate { get; set; }
-        public int MillisecondsMonthToDate { get; set; }
+        public int MinutesToday { get; set; }
+        public int MinutesWeekToDate { get; set; }
+        public int MinutesMonthToDate { get; set; }
     }
 }
