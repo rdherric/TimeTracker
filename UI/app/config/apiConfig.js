@@ -1,5 +1,5 @@
 // Root URL of the API
-const ApiUrlBase = 'http://localhost:58799';
+const ApiUrlBase = 'http://localhost/TimeTracker';
 
 // Placeholder for IDs
 const ID_PLACEHOLDER = '##ID##';
@@ -23,7 +23,10 @@ const taskUrls = {
     GET_TASK_LIST: '/task/all',
     ADD_TASK: '/task',
     UPDATE_TASK: '/task/' + ID_PLACEHOLDER,
-    DELETE_TASK: '/task/' + ID_PLACEHOLDER
+    DELETE_TASK: '/task/' + ID_PLACEHOLDER,
+    TIME_ZONE_OFFSET_QUERY: 'timeZoneOffset=',
+    START_DATE_QUERY: 'startDateTime=',
+    END_DATE_QUERY: 'endDateTime='
 };
 
 // Task API parser
@@ -33,33 +36,26 @@ export function createTaskUrl(type, id) {
 
 
 // Tasks API parser
-// export function createTasksUrl(type, startDate, endDate) {
+export function createAllTasksUrl(type, startDate, endDate) {
 
-//     // Create the base URL
-//     let rtn = ApiUrlBase + statisticsUrls[type];
+    // Create the base URL
+    let rtn = ApiUrlBase + taskUrls[type];
 
-//     // Add QueryStrings for start or end
-//     if (startDate > 0 || endDate > 0) {
+    // Add a QueryString for time zone offset
+    rtn = rtn + '?' + taskUrls.TIME_ZONE_OFFSET_QUERY + (new Date().getTimezoneOffset() * -1);
 
-//         // Add the Query marker
-//         rtn = rtn + '?';
-
-//         // Add the startDate if necessary
-//         if (startDate > 0) {
-//             rtn = rtn + statisticsUrls.START_DATE_QUERY + startDate;
-//         }
-
-//         // Add an Ampersand if necessary
-//         if (startDate > 0 && endDate > 0) {
-//             rtn = rtn + '&';
-//         }
-
-//         // Add the endDate if necessary
-//         if (endDate > 0) {
-//             rtn = rtn + statisticsUrls.END_DATE_QUERY + endDate;
-//         }
-//     }
-
-//     // Return the result
-//     return rtn;
-// }
+    // Add a QueryString for the start DateTime
+    if (startDate > 0) {
+        
+        rtn = rtn + '&' + taskUrls.START_DATE_QUERY + startDate;
+    }
+        
+    // Add a QueryString for the end DateTime
+    if (endDate > 0) {
+        
+        rtn = rtn + '&' + taskUrls.END_DATE_QUERY + endDate;
+    }
+        
+    // Return the result
+    return rtn;
+}

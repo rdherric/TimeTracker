@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { SectionList, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import moment from 'moment';
 import { Task } from './Task';
-import { DAY_DATE_FORMAT, DURATION_FORMAT } from '../../lib/dateFormat';
+import { formatToCompleteDateTime, formatToHoursMinutes } from '../../lib/dateFormat';
 
 // TaskList Component
 export class TaskList extends Component {
@@ -44,10 +43,10 @@ export class TaskList extends Component {
 
         return (
             <View style={{backgroundColor: 'darkgrey'}}>
-                <Text>{moment(dailyTask.date).format(DAY_DATE_FORMAT)}</Text>
-                <Text>This Day: {moment.utc(dailyTask.millisecondsToday).format(DURATION_FORMAT)}</Text>
-                <Text>This Week: {moment.utc(dailyTask.millisecondsWeekToDate).format(DURATION_FORMAT)}</Text>
-                <Text>This Month: {moment.utc(dailyTask.millisecondsMonthToDate).format(DURATION_FORMAT)}</Text>
+                <Text>{formatToCompleteDateTime(dailyTask.date)}</Text>
+                <Text>This Day: {formatToHoursMinutes(dailyTask.minutesToday)}</Text>
+                <Text>This Week: {formatToHoursMinutes(dailyTask.minutesWeekToDate)}</Text>
+                <Text>This Month: {formatToHoursMinutes(dailyTask.minutesMonthToDate)}</Text>
             </View>
         );
     }
@@ -92,9 +91,9 @@ TaskList.propTypes = {
                     endDateTime: PropTypes.number.isRequired
                 }).isRequired
             ).isRequired,
-            millisecondsToday: PropTypes.number.isRequired,
-            millisecondsWeekToDate: PropTypes.number.isRequired,
-            millisecondsMonthToDate: PropTypes.number.isRequired
+            minutesToday: PropTypes.number.isRequired,
+            minutesWeekToDate: PropTypes.number.isRequired,
+            minutesMonthToDate: PropTypes.number.isRequired
         }).isRequired
     ).isRequired,
     onTaskEditClick: PropTypes.func.isRequired,

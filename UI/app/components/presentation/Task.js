@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { DATE_FORMAT, DURATION_FORMAT } from '../../lib/dateFormat';
+import { formatToStandardDateTime, formatToHoursMinutes } from '../../lib/dateFormat';
  
 // Task class
 export class Task extends Component {
@@ -13,18 +13,18 @@ export class Task extends Component {
         // Local storage for the Task
         let localTask = this.props.task.item;
 
-        // Setup moment
-        moment.locale('en');
-
         return (
-            <View style={{ flexDirection: 'row'}}>
-                <Text style={{ flex: 1 }}>{localTask.id}</Text>
-                <Text style={{ flex: 1 }}>{localTask.projectClient}</Text>
-                <Text style={{ flex: 1 }}>{localTask.description}</Text>
-                <Text style={{ flex: 1 }}>{moment(localTask.startDateTime).format(DATE_FORMAT)}</Text>
-                <Text style={{ flex: 1 }}>{moment(localTask.endDateTime).format(DATE_FORMAT)}</Text>
-                <Text style={{ flex: 1 }}>{moment.utc(localTask.endDateTime - localTask.startDateTime).format(DURATION_FORMAT)}</Text>
-                <Button style={{ flex: 1 }} onPress={() => this.props.onEditClick(localTask)} title='EDIT' />
+            <View style={[{ flexDirection: 'row'}, {backgroundColor: projectColors[localTask.projectId]}]}>
+                <Text style={styles.projectClient}>{localTask.projectClient}</Text>
+                <Text style={styles.description}>{localTask.description}</Text>
+                <Text style={styles.dateTime}>{formatToStandardDateTime(localTask.startDateTime)}</Text>
+                <Text style={styles.dateTime}>{formatToStandardDateTime(localTask.endDateTime)}</Text>
+                <Text style={styles.duration}>{formatToHoursMinutes((localTask.endDateTime - localTask.startDateTime) / 60000)}</Text>
+                <View style={styles.buttons}>
+                    <Icon.Button name='edit' onPress={() => this.props.onEditClick(localTask)}>
+                        Edit
+                    </Icon.Button>
+                </View>
             </View>
         );        
     }
@@ -35,3 +35,32 @@ Task.propTypes = {
     task: PropTypes.object.isRequired,
     onEditClick: PropTypes.func
 };
+
+// Styles for the Task
+const styles = StyleSheet.create({
+    projectClient: {
+        flex: 1
+    },
+
+    description: {
+        flex: 4
+    },
+
+    dateTime: {
+        flex: 1
+    },
+
+    duration: {
+        flex: 0.25
+    },
+
+    buttons: {
+        flex: 0.5
+    }
+});
+
+const projectColors = [
+    'lightblue',
+    'lightsteelblue',
+    'palevioletred'
+];
