@@ -3,7 +3,7 @@ import { SectionList, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Task } from './Task';
-import { formatToCompleteDateTime, formatToHoursMinutes } from '../../lib/dateFormat';
+import { formatToCompleteDateTime, formatMinsToHoursMinutes } from '../../lib/dateFormat';
 
 // TaskList Component
 export class TaskList extends Component {
@@ -44,9 +44,9 @@ export class TaskList extends Component {
         return (
             <View style={{backgroundColor: 'darkgrey'}}>
                 <Text>{formatToCompleteDateTime(dailyTask.date)}</Text>
-                <Text>This Day: {formatToHoursMinutes(dailyTask.minutesToday)}</Text>
-                <Text>This Week: {formatToHoursMinutes(dailyTask.minutesWeekToDate)}</Text>
-                <Text>This Month: {formatToHoursMinutes(dailyTask.minutesMonthToDate)}</Text>
+                <Text>This Day: {formatMinsToHoursMinutes(dailyTask.minutesToday)}</Text>
+                <Text>This Week: {formatMinsToHoursMinutes(dailyTask.minutesWeekToDate)}</Text>
+                <Text>This Month: {formatMinsToHoursMinutes(dailyTask.minutesMonthToDate)}</Text>
             </View>
         );
     }

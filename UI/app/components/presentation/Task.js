@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
-import { formatToStandardDateTime, formatToHoursMinutes } from '../../lib/dateFormat';
+import { formatToStandardDateTime, formatMsToHoursMinutes } from '../../lib/dateFormat';
  
 // Task class
 export class Task extends Component {
@@ -19,7 +19,7 @@ export class Task extends Component {
                 <Text style={styles.description}>{localTask.description}</Text>
                 <Text style={styles.dateTime}>{formatToStandardDateTime(localTask.startDateTime)}</Text>
                 <Text style={styles.dateTime}>{formatToStandardDateTime(localTask.endDateTime)}</Text>
-                <Text style={styles.duration}>{formatToHoursMinutes((localTask.endDateTime - localTask.startDateTime) / 60000)}</Text>
+                <Text style={styles.duration}>{formatMsToHoursMinutes(localTask.endDateTime - localTask.startDateTime)}</Text>
                 <View style={styles.buttons}>
                     <Icon.Button name='edit' onPress={() => this.props.onEditClick(localTask)}>
                         Edit

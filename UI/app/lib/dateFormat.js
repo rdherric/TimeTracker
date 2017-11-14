@@ -18,8 +18,8 @@ export function formatToStandardDateTime(dt) {
     return moment(dt).format(DATE_FORMAT);
 }
 
-// Function to format milliseconds as Hours and Minutes
-export function formatToHoursMinutes(dt) {
+// Function to format minutes as Hours and Minutes
+export function formatMinsToHoursMinutes(dt) {
 
     // Get the hours and minutes
     let hours = parseInt(dt / 60);
@@ -28,3 +28,14 @@ export function formatToHoursMinutes(dt) {
     // Return the formatted string
     return (hours > 0 ? hours : '0') + ':' + (minutes > 0 ? minutes : '00');
 }
+
+// Function to format milliseconds as Hours and Minutes
+export function formatMsToHoursMinutes(dt) {
+    
+    // Get the value as minutes
+    let mins = dt / 60000;
+
+    // Return the other function
+    return formatMinsToHoursMinutes(mins);
+}
+    
