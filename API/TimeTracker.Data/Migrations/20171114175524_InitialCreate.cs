@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace TimeTracker.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,11 +13,11 @@ namespace TimeTracker.Data.Migrations
                 name: "Project",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Client = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
-                    IsDefault = table.Column<bool>(type: "bit", nullable: false)
+                    Client = table.Column<string>(maxLength: 256, nullable: false),
+                    Description = table.Column<string>(maxLength: 1024, nullable: true),
+                    IsDefault = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,12 +28,13 @@ namespace TimeTracker.Data.Migrations
                 name: "Task",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
-                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProjectId = table.Column<long>(type: "bigint", nullable: false),
-                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ProjectId = table.Column<long>(nullable: false),
+                    Description = table.Column<string>(maxLength: 1024, nullable: false),
+                    StartDateTime = table.Column<DateTime>(nullable: false),
+                    EndDateTime = table.Column<DateTime>(nullable: false),
+                    IsInSystemOfRecord = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

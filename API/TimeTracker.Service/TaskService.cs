@@ -147,31 +147,55 @@ namespace TimeTracker.Service
         /// <returns>List of Tasks with Statistics</returns>
         public IEnumerable<DailyTaskDto> GetAllDailyTasks(DateTime startDateTime, DateTime endDateTime, int timeZoneOffset)
         {
+            //Calculate the start and end DateTimes as local time by adding 
+            //in the time zone offset if necessary
+            if (startDateTime.Kind != DateTimeKind.Utc)
+            {
+                startDateTime = startDateTime.AddMinutes(timeZoneOffset);
+            }
+
+            if (endDateTime.Kind != DateTimeKind.Utc)
+            {
+                endDateTime = endDateTime.AddMinutes(timeZoneOffset);
+            }
+
             //Return the result - get the list of Dates, then 
             //Select into a DailyTaskDto
             return this._context.Tasks
                 .Where(t => t.StartDateTime > startDateTime && t.EndDateTime < endDateTime)
-                .GroupBy(t => t.StartDateTime.Date)
+                .GroupBy(t => t.StartDateTime.Date, (d, coll) => new
+                    {
+                        Key = d,
+                        Tasks = coll.Where(t2 => 
+                            t2.StartDateTime > this.GetUtcTaskStartDateTime(d, timeZoneOffset) && 
+                            t2.EndDateTime < this.GetUtcTaskEndDateTime(d, timeZoneOffset))
+                        
+                    })
                 .AsEnumerable()
                 .Select(g =>
                 {
-                    //Calculate the end time as UTC - that's the current 
-                    //Date plus the time zone offset, plus a day
-                    DateTime offsetEndDateTime = g.Key.AddMinutes(timeZoneOffset * -1).AddDays(1);
+                    //Calculate the start date as local - current Group Date
+                    //minus the time zone offset
+                    DateTime taskStartDateTime = this.GetUtcTaskStartDateTime(g.Key, timeZoneOffset);
+
+                    //Calculate the end time as local - current Group Date plus a day
+                    DateTime taskEndDateTime = this.GetUtcTaskEndDateTime(g.Key, timeZoneOffset);
 
                     //Return a DailyTaskDto
                     return new DailyTaskDto
                     {
-                        Date = g.Key.AddMinutes(timeZoneOffset * -1).ToJavaScriptDate(),
-                        Tasks = this._mapper.Map<IEnumerable<TaskDto>>(g.ToArray()),
-                        MinutesToday = this.GetMinutesToday(g.Key, offsetEndDateTime),
-                        MinutesWeekToDate = this.GetMinutesWeekToDate(g.Key, offsetEndDateTime),
-                        MinutesMonthToDate = this.GetMinutesMonthToDate(g.Key, offsetEndDateTime)
+                        Date = taskStartDateTime.ToJavaScriptDate(),
+                        Tasks = this._mapper.Map<IEnumerable<TaskDto>>(g.Tasks),
+                        MinutesToday = this.GetMinutesToday(taskStartDateTime, taskEndDateTime),
+                        MinutesWeekToDate = this.GetMinutesWeekToDate(taskStartDateTime, taskEndDateTime),
+                        MinutesMonthToDate = this.GetMinutesMonthToDate(taskStartDateTime, taskEndDateTime)
                     };
                 });
         }
+        #endregion
 
 
+        #region Statistics calculation methods
         /// <summary>
         /// GetMinutesToday gets the total minutes before the specified
         /// time for the specified date.
@@ -183,7 +207,7 @@ namespace TimeTracker.Service
         {
             //Return the result
             return this.GetMinutesForTimeSpan(
-                t => t.StartDateTime.Date == startDateTime.Date &&
+                t => t.StartDateTime > startDateTime &&
                      t.EndDateTime < endDateTime);
         }
 
@@ -198,11 +222,11 @@ namespace TimeTracker.Service
         public int GetMinutesWeekToDate(DateTime startDateTime, DateTime endDateTime)
         {
             //Calculate the first day of the week with this date
-            DateTime lastDateTimeOfLastWeek = startDateTime.Date.AddDays((int) startDateTime.DayOfWeek * -1);
+            DateTime firstDateTimeOfThisWeek = startDateTime.AddDays((int) startDateTime.DayOfWeek * -1);
 
             //Return the result
             return this.GetMinutesForTimeSpan(
-                t => t.StartDateTime > lastDateTimeOfLastWeek &&
+                t => t.StartDateTime > firstDateTimeOfThisWeek &&
                      t.EndDateTime < endDateTime);
         }
 
@@ -216,9 +240,12 @@ namespace TimeTracker.Service
         /// <returns>Number of minutes this month</returns>
         public int GetMinutesMonthToDate(DateTime startDateTime, DateTime endDateTime)
         {
+            //Calculate the first day of the month with this date
+            DateTime firstDateTimeOfThisMonth = startDateTime.AddDays((startDateTime.Day - 1) * -1);
+
             //Return the result
             return this.GetMinutesForTimeSpan(
-                t => t.StartDateTime.Month == startDateTime.Month &&
+                t => t.StartDateTime > firstDateTimeOfThisMonth &&
                      t.EndDateTime < endDateTime);
         }
 
@@ -236,6 +263,36 @@ namespace TimeTracker.Service
                 .Where(t => timeSpanSelector(t) == true)
                 .Select(t => t.EndDateTime - t.StartDateTime)
                 .Sum(ts => ts.TotalMinutes));
+        }
+        #endregion
+
+
+        #region Date Calculation methods
+        /// <summary>
+        /// GetUtcTaskStartDateTime calculates the start DateTime of a 
+        /// Task in UTC dates and times.
+        /// </summary>
+        /// <param name="dt">The DateTime to use to get UTC</param>
+        /// <param name="timeZoneOffset">The time zone Offset to use</param>
+        /// <returns>UTC-adjusted DateTime</returns>
+        private DateTime GetUtcTaskStartDateTime(DateTime dt, int timeZoneOffset)
+        {
+            //Return the DateTime as UTC
+            return dt.AddMinutes(timeZoneOffset * -1);
+        }
+
+
+        /// <summary>
+        /// GetUtcTaskEndDateTime calculates the end DateTime of a 
+        /// Task in UTC dates and times.
+        /// </summary>
+        /// <param name="dt">The DateTime to use to get UTC</param>
+        /// <param name="timeZoneOffset">The time zone Offset to use</param>
+        /// <returns>UTC-adjusted DateTime</returns>
+        private DateTime GetUtcTaskEndDateTime(DateTime dt, int timeZoneOffset)
+        {
+            //Return the DateTime as UTC plus a day
+            return this.GetUtcTaskStartDateTime(dt, timeZoneOffset).AddDays(1);
         }
         #endregion
     }
