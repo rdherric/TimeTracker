@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
+import { TaskType } from '../../config/taskPropTypes';
 import { formatToStandardDateTime, formatMsToHoursMinutes } from '../../lib/dateFormat';
  
-// Task class
-export class Task extends Component {
+// TaskDisplay class
+export class TaskDisplay extends Component {
 
     // Render method
     render() {
 
         // Local storage for the Task
-        let localTask = this.props.task.item;
+        let localTask = this.props.task;
 
         return (
             <View style={[{ flexDirection: 'row'}, {backgroundColor: projectColors[localTask.projectId]}]}>
@@ -31,9 +32,9 @@ export class Task extends Component {
 }
 
 // Setup the PropTypes
-Task.propTypes = {
-    task: PropTypes.object.isRequired,
-    onEditClick: PropTypes.func
+TaskDisplay.propTypes = {
+    task: TaskType.isRequired,
+    onEditClick: PropTypes.func.isRequired
 };
 
 // Styles for the Task

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { SectionList, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { Task } from './Task';
+import { TaskDisplay } from './TaskDisplay';
+import { DailyTaskType } from '../../config/taskPropTypes';
 import { formatToCompleteDateTime, formatMinsToHoursMinutes } from '../../lib/dateFormat';
 
 // TaskList Component
@@ -15,15 +16,15 @@ export class TaskList extends Component {
         super(props);
 
         // Now dispatch a call to the API for the Task list and statistics
-        // via the passed methods on Props
+        // data via the passed method on Props
         props.dispatchGetTaskList();
     }
 
     // Render method
     render() {
-
+        
         // Render the Sections
-        let sections = this._buildSections();
+        let sections = this._buildSections(this.props);
 
         return (
             <SectionList
@@ -52,17 +53,19 @@ export class TaskList extends Component {
     }
 
     // Method to extract the Key for an Item
-    _extractKey = (task, index) => task.id;
+    _extractKey = (task, index) => {
+        return task.id;
+    }
 
     // Method to render a Task
-    _renderTask = (task) => {
+    _renderTask = (sectionTask) => {
         return (
-            <Task task={task} onEditClick={this.props.onTaskEditClick} />
+            <TaskDisplay task={sectionTask.item} onEditClick={this.props.onTaskEditClick} />
         );
     }
 
     // Method to build the set of Sections
-    _buildSections = () => {
+    _buildSections = (props) => {
 
         // Return the Sections
         let rtn = this.props.taskList
@@ -79,23 +82,7 @@ export class TaskList extends Component {
 
 // Setup PropTypes
 TaskList.propTypes = {
-    taskList: PropTypes.arrayOf(
-        PropTypes.shape({
-            date: PropTypes.number.isRequired,
-            tasks: PropTypes.arrayOf(
-                PropTypes.shape({
-                    id: PropTypes.number.isRequired,
-                    projectClient: PropTypes.string.isRequired,
-                    description: PropTypes.string.isRequired,
-                    startDateTime: PropTypes.number.isRequired,
-                    endDateTime: PropTypes.number.isRequired
-                }).isRequired
-            ).isRequired,
-            minutesToday: PropTypes.number.isRequired,
-            minutesWeekToDate: PropTypes.number.isRequired,
-            minutesMonthToDate: PropTypes.number.isRequired
-        }).isRequired
-    ).isRequired,
+    taskList: PropTypes.arrayOf(DailyTaskType).isRequired,
     onTaskEditClick: PropTypes.func.isRequired,
     dispatchGetTaskList: PropTypes.func.isRequired
 };

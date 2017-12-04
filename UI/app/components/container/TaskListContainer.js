@@ -1,12 +1,14 @@
 import { Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { TaskList } from '../presentation/TaskList';
+import { getProjectList } from '../../actions/project/projectListActions';
 import { getTaskList } from '../../actions/task/taskListActions';
 
 // Mapping for properties
 const mapStateToProps = state => {
     return {
-        taskList: state.tasks.taskList
+        taskList: state.tasks.taskList,
+        projectList: state.projects.projectList
     };
 };
 
@@ -19,7 +21,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 // Connect to Redux
-export const ManageTasks = connect(
+export const TaskListContainer = connect(
     mapStateToProps,
     mapDispatchToProps
 )(TaskList);
