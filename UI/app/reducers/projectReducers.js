@@ -1,3 +1,4 @@
+import { STATUS_NEVER_PROCESSED } from '../actions/base/statusConstants';
 import { 
     GET_PROJECT_LIST, GET_PROJECT_LIST_SUCCESS, GET_PROJECT_LIST_ERROR,
     ADD_PROJECT, ADD_PROJECT_SUCCESS, ADD_PROJECT_ERROR,
@@ -8,7 +9,9 @@ import {
 // Initial state for the Reducers
 const initialState = {
     projectList: [],
-    projectUi: {}
+    projectUi: {
+        status: STATUS_NEVER_PROCESSED
+    }
 };
 
 // Reducer for Project data

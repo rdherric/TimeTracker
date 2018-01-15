@@ -1,10 +1,12 @@
+import { STATUS_PROCESSING_BEGIN, STATUS_PROCESSING_END } from './statusConstants';
+
 // Action to perform an operation on an Entity
 export function entityOperation(type, entity) {
     return {
         type,
         entity,
         ui: {
-            inProcess: true
+            status: STATUS_PROCESSING_BEGIN
         }
     };
 }
@@ -15,7 +17,7 @@ export function entityOperationSuccess(type, rtn) {
         type,
         rtn,
         ui: {
-            inProcess: false
+            status: STATUS_PROCESSING_END
         }
     };
 }
@@ -26,7 +28,7 @@ export function entityOperationError(type, rtn, error) {
         type,
         rtn,
         ui: {
-            inProcess: false,
+            status: STATUS_PROCESSING_END,
             error
         }
     };

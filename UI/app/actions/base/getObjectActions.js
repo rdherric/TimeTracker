@@ -1,9 +1,11 @@
+import { STATUS_PROCESSING_BEGIN, STATUS_PROCESSING_END } from './statusConstants';
+
 // Action to get an object from a server
 export function getObject(type) {
     return {
         type,
         ui: { 
-            inProcess: true 
+            status: STATUS_PROCESSING_BEGIN
         }
     };
 }
@@ -14,7 +16,7 @@ export function getObjectSuccess(type, rtn) {
         type,
         rtn,
         ui: {
-            inProcess: false
+            status: STATUS_PROCESSING_BEGIN
         }
     };
 }
@@ -25,7 +27,7 @@ export function getObjectError(type, rtn, error) {
         type,
         rtn,
         ui: {
-            inProcess: false,
+            status: STATUS_PROCESSING_BEGIN,
             error
         }
     };

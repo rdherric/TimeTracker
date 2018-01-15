@@ -1,0 +1,4 @@
+// Processing operation constants
+export const STATUS_NEVER_PROCESSED = 'NEVER_PROCESSED';
+export const STATUS_PROCESSING_BEGIN = 'PROCESSING_BEGIN';
+export const STATUS_PROCESSING_END = 'PROCESSING_END';

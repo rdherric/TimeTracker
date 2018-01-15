@@ -1,3 +1,4 @@
+import { STATUS_NEVER_PROCESSED } from '../actions/base/statusConstants';
 import { 
     GET_TASK_LIST, GET_TASK_LIST_SUCCESS, GET_TASK_LIST_ERROR,
     ADD_TASK, ADD_TASK_SUCCESS, ADD_TASK_ERROR,
@@ -8,7 +9,9 @@ import {
 // Initial state for the Reducers
 const initialState = {
     taskList: [],
-    taskUi: {}
+    taskUi: {
+        status: STATUS_NEVER_PROCESSED
+    }
 };
 
 // Reducer for Task data
