@@ -6,36 +6,36 @@ import { TaskType } from '../../config/taskPropTypes';
 import { formatToStandardDateTime, formatMsToHoursMinutes } from '../../lib/dateFormat';
  
 // TaskDisplay class
-export class TaskDisplay extends Component {
+const TaskDisplay = (props) => {
 
-    // Render method
-    render() {
+    // Local storage for the Task
+    let localTask = props.task;
 
-        // Local storage for the Task
-        let localTask = this.props.task;
-
-        return (
-            <View style={[{ flexDirection: 'row'}, {backgroundColor: projectColors[localTask.projectId]}]}>
-                <Text style={styles.projectClient}>{localTask.projectClient}</Text>
-                <Text style={styles.description}>{localTask.description}</Text>
-                <Text style={styles.dateTime}>{formatToStandardDateTime(localTask.startDateTime)}</Text>
-                <Text style={styles.dateTime}>{formatToStandardDateTime(localTask.endDateTime)}</Text>
-                <Text style={styles.duration}>{formatMsToHoursMinutes(localTask.endDateTime - localTask.startDateTime)}</Text>
-                <View style={styles.buttons}>
-                    <Icon.Button name='edit' onPress={() => this.props.onEditClick(localTask)}>
-                        Edit
-                    </Icon.Button>
-                </View>
+    return (
+        <View style={[{ flexDirection: 'row'}, {backgroundColor: projectColors[localTask.projectId]}]}>
+            <Text style={styles.projectClient}>{localTask.projectClient}</Text>
+            <Text style={styles.description}>{localTask.description}</Text>
+            <Text style={styles.dateTime}>{formatToStandardDateTime(localTask.startDateTime)}</Text>
+            <Text style={styles.dateTime}>{formatToStandardDateTime(localTask.endDateTime)}</Text>
+            <Text style={styles.duration}>{formatMsToHoursMinutes(localTask.endDateTime - localTask.startDateTime)}</Text>
+            <View style={styles.buttons}>
+                <Icon.Button name='edit' onPress={() => props.onEditClick(localTask)}>
+                    Edit
+                </Icon.Button>
             </View>
-        );        
-    }
-}
+        </View>
+    );        
+};
 
 // Setup the PropTypes
 TaskDisplay.propTypes = {
     task: TaskType.isRequired,
     onEditClick: PropTypes.func.isRequired
 };
+
+// Export TaskDisplay
+export default TaskDisplay;
+
 
 // Styles for the Task
 const styles = StyleSheet.create({

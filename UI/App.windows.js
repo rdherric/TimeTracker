@@ -1,7 +1,7 @@
 import React, { Component, View } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './app/config/store';
-import { TaskTab } from './app/components/presentation/TaskTab';
+import TaskTab from './app/components/presentation/TaskTab';
 
 // Top level App function
 class App extends Component{

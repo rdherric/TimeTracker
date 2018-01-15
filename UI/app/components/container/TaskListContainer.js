@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
 import { connect } from 'react-redux';
-import { TaskList } from '../presentation/TaskList';
+import TaskList from '../presentation/TaskList';
 import { getProjectList } from '../../actions/project/projectListActions';
 import { getTaskList } from '../../actions/task/taskListActions';
 
@@ -8,6 +8,7 @@ import { getTaskList } from '../../actions/task/taskListActions';
 const mapStateToProps = state => {
     return {
         taskList: state.tasks.taskList,
+        taskUi: state.tasks.taskUi,
         projectList: state.projects.projectList
     };
 };
