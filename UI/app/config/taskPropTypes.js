@@ -1,5 +1,20 @@
 import PropTypes from 'prop-types';
 
+// Blank Task object
+export const BlankTask = {
+    id: -1,
+    projectId: -1,
+    projectClient: '',
+    description: '',
+    startDateTime: 0,
+    endDateTime: 0
+};
+
+// Validation schema for a Task
+export const TaskConstraints = {
+    descriptionMaxLength: 1024
+};
+
 // PropTypes for a Task object
 export const TaskType = PropTypes.shape({
     id: PropTypes.number.isRequired,

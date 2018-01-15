@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
 import { connect } from 'react-redux';
-import { EditTask } from '../presentation/EditTask';
+import EditTask from '../presentation/EditTask';
 import { getProjectList } from '../../actions/project/projectListActions';
 import { addTask, updateTask } from '../../actions/task/taskOperationActions';
 
@@ -8,6 +8,7 @@ import { addTask, updateTask } from '../../actions/task/taskOperationActions';
 const mapStateToProps = (state, ownProps) => {
     return {
         projectList: state.projects.projectList,
+        projectUi: state.projects.projectUi,
         task: ownProps.task
     };
 };
